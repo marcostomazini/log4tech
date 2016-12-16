@@ -11,10 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: Description("MTTech log layer com+")]
 [assembly: ApplicationActivation(ActivationOption.Server)]
 [assembly: ApplicationAccessControl(false, AccessChecksLevel = AccessChecksLevelOption.ApplicationComponent)]
-namespace Log4Tech
+namespace log4tech
 {
     [Guid("ADF0D549-D84B-422c-A15E-5B22C1E35FB5")]
-    public class Logging : ServicedComponent
+    public class Logging : ServicedComponent, ILogging
     {
         private static readonly ILog log = LogManager.GetLogger("PortoLogger");
         private static readonly log4net.Core.Level AuditoriaLevel = new log4net.Core.Level(50000, "AUDIT");
@@ -38,6 +38,12 @@ namespace Log4Tech
         public void Error(string message)
         {
             log.Error(message);
+        }
+
+        public string AuditWithString(string message)
+        {
+            Audit(message);
+            return message;
         }
 
         public string InfoWithString(string message)
@@ -74,8 +80,6 @@ namespace Log4Tech
 
             return "pow " + GetNameFileConfig().FullName;
         }
-
-        
 
         public FileInfo GetNameFileConfig()
         {
