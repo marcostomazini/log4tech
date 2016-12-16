@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\Interface\ILogging.cs" />
     <Compile Include="Business\Logging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,6 +64,6 @@
   -->
   <PropertyGroup>
     <PreBuildEvent>rem C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\regsvcs /u $(TargetFileName)</PreBuildEvent>
-    <PostBuildEvent>C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\regsvcs $(TargetFileName)</PostBuildEvent>
+    <PostBuildEvent>rem C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\regsvcs $(TargetFileName)</PostBuildEvent>
   </PropertyGroup>
 </Project>

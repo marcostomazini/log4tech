@@ -1,22 +1,34 @@
 using log4net;
 using log4net.Appender;
 using log4net.Config;
-using log4tech.Business.Interface;
 using System;
 using System.EnterpriseServices;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
-namespace log4tech
+[assembly: ApplicationName("log4tech")]
+[assembly: Description("MTTech log layer com+")]
+[assembly: ApplicationActivation(ActivationOption.Server)]
+[assembly: ApplicationAccessControl(false, AccessChecksLevel = AccessChecksLevelOption.ApplicationComponent)]
+namespace Log4Tech
 {
-    public class Logging : ServicedComponent, ILogging
+    [Guid("ADF0D549-D84B-422c-A15E-5B22C1E35FB5")]
+    public class Logging : ServicedComponent
     {
-        private static readonly ILog log = LogManager.GetLogger("ErrorLogger");
+        private static readonly ILog log = LogManager.GetLogger("PortoLogger");
+        private static readonly log4net.Core.Level AuditoriaLevel = new log4net.Core.Level(50000, "AUDIT");
 
         public Logging()
         {
+            LogManager.GetRepository().LevelMap.Add(AuditoriaLevel);
             XmlConfigurator.ConfigureAndWatch(GetNameFileConfig());
-        }        
+        }
+
+        public void Audit(string message)
+        {
+            log.Logger.Log(MethodBase.GetCurrentMethod().DeclaringType, AuditoriaLevel, message, null);
+        }
 
         public void Info(string message)
         {
@@ -58,8 +70,12 @@ namespace log4tech
             log.Info("Info is OK");
             log.Warn("Warn is OK");
             log.Error("Error is OK");
+            Audit("Audit is OK");
+
             return "pow " + GetNameFileConfig().FullName;
         }
+
+        
 
         public FileInfo GetNameFileConfig()
         {
